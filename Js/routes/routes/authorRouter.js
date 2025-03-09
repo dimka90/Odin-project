@@ -1,6 +1,6 @@
 
 const {Router} = require("express")
-
+const {getAuthorById} = require("../controllers/authorController")
 const authorRouter = Router()
 
 
@@ -9,8 +9,6 @@ authorRouter.get("/all", (req, res) =>{
     res.send("All authors")
 });
 
-authorRouter.get("/:authorId", (req, res) => {
-    res.send(`Author Id ${req.params.authorId}`);
-})
+authorRouter.get("/:authorId", getAuthorById);
 
 module.exports = authorRouter
