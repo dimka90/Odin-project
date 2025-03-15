@@ -2,3 +2,6 @@ Js/**/node_modules/
 Ts/**/node_modules/
 Js/routePractice/node_modules
 js/routes/node_modules
+Js/User/node_modules
+Js/Postgress/node_modules/
+Js/Postgress/.env
