@@ -1,7 +1,7 @@
 const db=require("../db/pool")
 
 
-async function createItem(name, price, quantity, brand, category,) {
+async function createItemQuery(name, price, quantity, brand, category) {
     try{
         const [categoryRow, brandRow] = await Promise.all([
             db.query("SELECT Id FROM category where category = $1", [category]),
@@ -32,7 +32,22 @@ async function createItem(name, price, quantity, brand, category,) {
         throw error
         };
 
+    }
 
-}
+    async function getAllItemsQuery() {
+        try {
+            const {rows} = await db.query("SELECT * FROM items");
 
-module.exports = {createItem}
+            if(!rows.length){
+                throw new Error("Fail to Fetch Data from the database")
+            }
+       
+            console.log(rows)
+            return rows
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
+module.exports = {createItemQuery, getAllItemsQuery}

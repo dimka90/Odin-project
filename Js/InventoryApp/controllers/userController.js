@@ -1,11 +1,12 @@
-const db = require("../db/quries")
+const {getAllItemsQuery, createItemQuery} = require("../db/quries");
+// const { get } = require("../routes/userRoutes");
 
 
 
 async function createItem(req, res) {
     const {name,price,quantity, category, brand} = req.body;
     try{
-        const row= await db.createItem(name, parseInt(price), parseInt(quantity), brand, category);
+        const row= await createItemQuery(name, parseInt(price), parseInt(quantity), brand, category);
         res.status(201).json({
             succes: true,
             message: "Item Successfully Created",
@@ -30,5 +31,26 @@ async function createItem(req, res) {
  
 }
 
-module.exports=createItem
+async function  getAllItems(req, res) {
+    try {
+        
+
+    const rows = await getAllItemsQuery();
+    console.log("Value from all", rows)
+    res.status(200).json(
+        {
+            message: rows
+        }
+    )
+
+    } catch (error) {
+       
+        res.status(400).json({
+            error: error.message
+        })
+    }
+
+    
+}
+module.exports={createItem, getAllItems}
   
