@@ -1,7 +1,6 @@
-const {getAllItemsQuery, createItemQuery, getAItemByCategoryQuery} = require("../db/quries");
-// const { get } = require("../routes/userRoutes");
-
-
+const {getAllItemsQuery, createItemQuery,
+     getAItemByCategoryQuery, 
+     createCategoryQuery, createBrandQuery} = require("../db/quries");
 
 async function createItem(req, res) {
     const {name,price,quantity, category, brand} = req.body;
@@ -87,5 +86,56 @@ catch(error){
     })
 }
 }
-module.exports={createItem, getAllItems, getAItemByCategory}
+
+async function createCategory(req, res){
+    try{
+        const {cat} = req.params;
+        const category = await createCategoryQuery(cat);
+
+        res.status(200).json({
+            succes: true,
+            message: `${category} successfully added`,
+            data: category
+    
+        })
+    }
+    catch(error){
+
+        res.status(400).json({
+            succes: false,
+            message: `${category} failed to be added`,
+            data: category
+    
+        })
+    }
+   
+
+}
+
+async function createBrand(req, res){
+    try{
+        const {brand} = req.params;
+        console.log(brand)
+        const brandStored = await createBrandQuery(brand);
+        console.log(brandStored)
+        res.status(200).json({
+            succes: true,
+            message: `${brandStored[0].brand_type} successfully added`,
+            data: brandStored[0].brand_type
+    
+        })
+    }
+    catch(error){
+
+        res.status(400).json({
+            succes: false,
+            message: error.message
+
+    
+        })
+    }
+   
+
+}
+module.exports={createItem, getAllItems, getAItemByCategory, createCategory, createBrand}
   

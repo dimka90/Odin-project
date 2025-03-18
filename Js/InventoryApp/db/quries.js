@@ -1,6 +1,32 @@
 const db=require("../db/pool")
 
+async function createCategoryQuery(category) {
+    console.log(category)
+    try {
+        const {rows} =await db.query("INSERT INTO category (category) VALUES ($1) Returning *", [category]);
+        if (!rows.length)
+            {
+            
+                throw new Error("Could not Create new Category")
+            }
 
+         return rows[0].category;
+    } catch (error) {
+        throw error
+    }
+}
+
+async function createBrandQuery(brand) {
+    try{
+        console.log("i am the brand", brand)
+        const {rows} = await db.query("INSERT INTO brand (brand_type) values($1) RETURNING *", [brand])
+        console.log(rows)
+    }
+    catch(error)
+    {
+        throw new Error(" Fail to insert insert brand")
+    }
+}
 async function createItemQuery(name, price, quantity, brand, category) {
     try{
         const [categoryRow, brandRow] = await Promise.all([
@@ -41,8 +67,6 @@ async function createItemQuery(name, price, quantity, brand, category) {
             if(!rows.length){
                 throw new Error("Fail to Fetch Data from the database")
             }
-       
-            console.log(rows)
             return rows
         } catch (error) {
             throw error;
@@ -69,4 +93,4 @@ async function createItemQuery(name, price, quantity, brand, category) {
     }
 
 
-module.exports = {createItemQuery, getAllItemsQuery, getAItemByCategoryQuery}
+module.exports = {createItemQuery, getAllItemsQuery, getAItemByCategoryQuery, createCategoryQuery, createBrandQuery}
