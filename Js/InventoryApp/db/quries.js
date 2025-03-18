@@ -48,6 +48,25 @@ async function createItemQuery(name, price, quantity, brand, category) {
             throw error;
         }
     }
+    async function  getAItemByCategoryQuery(name) {
+        
+        try{
+        const {rows} = await db.query("SELECT id from category where  category = $1", [name])
+        if(!rows.length){
+            throw new Error(" Category does not Exist")
+        }
+        const {rows: itemsRow}= await db.query("SELECT name, price, quantity from items where category_id = $1", [rows[0].id]);
+
+        if(!itemsRow.length){
+            throw new Error("Could not retrive items")
+        }
+        return itemsRow
+
+    }
+    catch (error){
+        throw error
+    }
+    }
 
 
-module.exports = {createItemQuery, getAllItemsQuery}
+module.exports = {createItemQuery, getAllItemsQuery, getAItemByCategoryQuery}

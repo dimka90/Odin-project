@@ -1,4 +1,4 @@
-const {getAllItemsQuery, createItemQuery} = require("../db/quries");
+const {getAllItemsQuery, createItemQuery, getAItemByCategoryQuery} = require("../db/quries");
 // const { get } = require("../routes/userRoutes");
 
 
@@ -36,10 +36,18 @@ async function  getAllItems(req, res) {
         
 
     const rows = await getAllItemsQuery();
-    console.log("Value from all", rows)
+
+    if(!rows.length){
+
+        throw new Error("Fail To read Items from the dataBase")
+    }
     res.status(200).json(
         {
-            message: rows
+            success: true,
+            message: "Items successfully retirved",
+            data: {
+                data: rows
+            }
         }
     )
 
@@ -52,5 +60,32 @@ async function  getAllItems(req, res) {
 
     
 }
-module.exports={createItem, getAllItems}
+
+async function getAItemByCategory(req, res) {
+try{
+
+
+const {name} = req.params;
+if(!name){
+    throw new Error("Category can't be Empty")
+}
+const items = await getAItemByCategoryQuery(name);
+
+if(!items.length){
+
+    throw new Error("Fail To read Items from the dataBase")
+}
+res.status(200).json({
+    data: items
+})
+}
+catch(error){
+
+    res.status(300).json({
+        success: false,
+        data:error.message
+    })
+}
+}
+module.exports={createItem, getAllItems, getAItemByCategory}
   
